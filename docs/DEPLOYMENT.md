@@ -4,7 +4,7 @@ The complete app needs a Node process and Python. The hosted Site preview serves
 
 ## Local first run
 
-Use Node.js 22+ and Python 3.10+. No `npm install` or Python package installation is required for the application runtime.
+Use Node.js 20+ (22 LTS recommended) and Python 3.10+. No `npm install` or Python package installation is required for the application runtime.
 
 ```bash
 npm run build
@@ -36,6 +36,10 @@ Production startup requires `APP_AUTH_PASSWORD` and validates each registered co
 | `PYTHON_EXECUTABLE` | Optional absolute Python executable path |
 | `LLM_API_KEY`, `LLM_MODEL` | Optional server-side provider configuration |
 | `LLM_API_URL` | HTTPS chat-completions endpoint |
+| `ENABLE_HSTS` | `true` only when served over HTTPS; adds `Strict-Transport-Security` |
+| `API_RATE_LIMIT` | API requests per client per minute; default `90` |
+| `PYTHON_MAX_CONCURRENCY` | Simultaneous Python calculations; default `4` (excess requests queue) |
+| `PYTHON_TIMEOUT_MS` | Per-calculation timeout; default `30000` |
 
 For a native process, copy `.env.example` to `.env`, configure values and run `node --env-file=.env backend/server.mjs`. Add your host's process supervisor, HTTPS termination and persistent disk. The server does not load `.env` implicitly; Compose does read it for interpolation.
 
@@ -48,7 +52,7 @@ For a native process, copy `.env.example` to `.env`, configure values and run `n
 - Save a scenario and inspect Evidence → Checks & history; export JSON and check its assumptions/provenance.
 - Restart the container and confirm saved SQLite runs remain.
 
-Direct runtime, API, numerical and desktop-browser checks were performed for this release. Docker was unavailable in the build environment, so the Docker image itself was not built or run here. A live optional LLM provider call requires your own configuration and remains unverified.
+Direct runtime, API, numerical and desktop-browser checks were performed for this release. The Docker image is built on every push by the GitHub Actions `docker` job. A live optional LLM provider call requires your own configuration and remains unverified.
 
 ## Updates and data
 

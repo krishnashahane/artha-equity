@@ -2,18 +2,26 @@ services:
   artha:
     build: .
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     environment:
       NODE_ENV: production
       HOST: 0.0.0.0
       PORT: 3000
       APP_AUTH_USER: ${APP_AUTH_USER:-research}
       APP_AUTH_PASSWORD: ${APP_AUTH_PASSWORD:?Set APP_AUTH_PASSWORD in your local .env file}
+      ENABLE_HSTS: ${ENABLE_HSTS:-false}
       LLM_API_KEY: ${LLM_API_KEY:-}
       LLM_MODEL: ${LLM_MODEL:-}
       LLM_API_URL: ${LLM_API_URL:-https://api.openai.com/v1/chat/completions}
     volumes:
       - artha-data:/app/data/runtime
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
     restart: unless-stopped
 volumes:
   artha-data:

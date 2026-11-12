@@ -4,11 +4,12 @@ import {spawnSync} from 'node:child_process';
 import {readFileSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import {calculate,defaults} from '../public/engine.js';
+import {resolvePython} from '../backend/python_path.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const company=JSON.parse(readFileSync(new URL('../data/companies.json',import.meta.url),'utf8')).companies[0];
 for(const scenario of ['base','bull','bear'])test(`Python and browser agree on ${scenario} scenario`,()=>{
   const a=defaults(company,scenario),js=calculate(company,a);
-  const executable=process.env.CODEX_PRIMARY_RUNTIME_PYTHON||'python3';
+  const executable=resolvePython();
   const p=spawnSync(executable,['scripts/check_parity.py'],{cwd:root,input:JSON.stringify(a),encoding:'utf8'});
   assert.equal(p.status,0,p.stderr);
   const py=JSON.parse(p.stdout),s=py.summary;

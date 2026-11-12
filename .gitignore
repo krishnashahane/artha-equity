@@ -1,0 +1,31 @@
+# Build output
+dist/
+coverage/
+*.zip
+
+# Runtime state (SQLite history, generated preflight)
+data/runtime/
+data/processed/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Node
+node_modules/
+npm-debug.log*
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

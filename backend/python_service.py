@@ -102,7 +102,8 @@ def dispatch(input):
     if action=='runs':return {'runs':ResearchStore(ROOT/'data/runtime/research.sqlite3').list_runs(input.get('companyId'))}
     bundle=json.loads((ROOT/'data/companies.json').read_text());company=next((c for c in bundle['companies'] if c['id']==input.get('companyId')),None)
     if not company:raise ValueError('Unknown registered company.')
-    a=input.get('assumptions',company['assumptions'])
+    a=input.get('assumptions') or company['assumptions']
+    if not isinstance(a,dict):raise ValueError('Assumptions must be a JSON object.')
     if action=='analytics':
         snapshot=json.loads((ROOT/'data/source_snapshot.json').read_text());return fundamental_ratios(snapshot['annuals'],a['tax'])
     if action=='assistant':
@@ -116,7 +117,17 @@ def dispatch(input):
     if input.get('persist'):result['runId']=ResearchStore(ROOT/'data/runtime/research.sqlite3').save(company['id'],a,result)
     return result
 
-if __name__=='__main__':
-    try:output=dispatch(json.load(sys.stdin))
-    except (ValueError,KeyError,TypeError) as e:output={'valid':False,'errors':[str(e)],'reconciliations':[],'calculationAuthority':'python'}
+def main():
+    try:
+        payload=json.load(sys.stdin)
+        if not isinstance(payload,dict):raise ValueError('Request must be a JSON object.')
+        output=dispatch(payload)
+    except KeyError as e:output={'valid':False,'errors':[f'Missing required field: {e.args[0]}'],'reconciliations':[],'calculationAuthority':'python'}
+    except (ValueError,TypeError) as e:output={'valid':False,'errors':[str(e)],'reconciliations':[],'calculationAuthority':'python'}
+    except Exception as e:  # never leak a traceback to API clients; log it for operators
+        print(f'python_service internal error: {type(e).__name__}: {e}',file=sys.stderr)
+        output={'valid':False,'errors':['The calculation could not be completed with these inputs.'],'reconciliations':[],'calculationAuthority':'python'}
     print(json.dumps(output,allow_nan=False))
+
+if __name__=='__main__':
+    main()

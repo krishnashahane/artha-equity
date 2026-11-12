@@ -1,0 +1,26 @@
+{
+  "name": "artha-equity-research",
+  "version": "1.3.0",
+  "private": true,
+  "type": "module",
+  "description": "Desktop equity research with authoritative Python analytics and source-backed explanations",
+  "scripts": {
+    "start": "node backend/server.mjs",
+    "dev": "node --watch backend/server.mjs",
+    "build": "node scripts/build.mjs",
+    "test": "node --test web-tests/*.test.mjs",
+    "test:py": "node scripts/py.mjs -m unittest discover -s tests",
+    "preflight": "node scripts/py.mjs scripts/preflight.py",
+    "check": "npm run build && npm test && npm run test:py",
+    "model": "node scripts/cli.mjs",
+    "clean": "node -e \"for (const d of ['dist','coverage']) require('fs').rmSync(d,{recursive:true,force:true})\""
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/krishnashahane/artha-equity.git"
+  }
+}
