@@ -4,6 +4,8 @@ import {clone} from './engine.js';
 
 /** @param {string} s CSS selector. @returns {HTMLElement|null} */
 const $=s=>document.querySelector(s);
+/** Only https links are rendered; anything else (javascript:, data:) becomes inert. */
+const safeUrl=u=>{try{const x=new URL(String(u));return x.protocol==='https:'?x.href:'#';}catch{return '#';}};
 const e=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const n=(v,d=0)=>typeof v==='number'&&Number.isFinite(v)?new Intl.NumberFormat('en-IN',{maximumFractionDigits:d,minimumFractionDigits:d}).format(v):'—';
 const money=(v,d=0)=>typeof v==='number'&&Number.isFinite(v)?'₹'+n(v,d):'—';
@@ -32,4 +34,4 @@ function toast(message){clearTimeout(toastTimer);$('#toast').textContent=message
  */
 function setCompany(id){const next=dataset.companies.find(c=>c.id===id);if(!next)return false;company=next;cases=compiled.cases[id];return true;}
 
-export {$,e,n,money,percent,dated,paths,icon,company,peers,cases,state,toastTimer,button,linkButton,runtime,dataset,clone,read,write,event,toast,setCompany,compiled};
+export {safeUrl,$,e,n,money,percent,dated,paths,icon,company,peers,cases,state,toastTimer,button,linkButton,runtime,dataset,clone,read,write,event,toast,setCompany,compiled};
