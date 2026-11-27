@@ -1,0 +1,20 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {spawnSync} from 'node:child_process';
+import {readFileSync,existsSync} from 'node:fs';
+import {fileURLToPath} from 'node:url';
+import {calculate,defaults} from './reference_engine.mjs';
+const root=fileURLToPath(new URL('../',import.meta.url));
+const company=JSON.parse(readFileSync(new URL('../data/companies.json',import.meta.url),'utf8')).companies[0];
+for(const scenario of ['base','bull','bear'])test(`Python and test-only JS reference agree on ${scenario} scenario`,()=>{
+  const a=defaults(company,scenario),js=calculate(company,a);
+  const venv=root+(process.platform==='win32'?'.venv/Scripts/python.exe':'.venv/bin/python');
+  const executable=process.env.CODEX_PRIMARY_RUNTIME_PYTHON||(existsSync(venv)?venv:'python3');
+  const p=spawnSync(executable,['scripts/check_parity.py'],{cwd:root,input:JSON.stringify(a),encoding:'utf8'});
+  assert.equal(p.status,0,p.stderr);
+  const py=JSON.parse(p.stdout),s=py.summary;
+  assert.ok(Math.abs(s.enterprise_value_inr_crore-js.enterpriseValue)<1e-6);
+  assert.ok(Math.abs(s.equity_value_inr_crore-js.equityValue)<1e-6);
+  assert.ok(Math.abs(s.value_per_share_inr-js.perShare)<1e-8);
+  py.fcff.forEach((v,i)=>assert.ok(Math.abs(v-js.forecast[i].fcff)<1e-8));
+});

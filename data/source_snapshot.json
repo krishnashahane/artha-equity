@@ -1,0 +1,416 @@
+{
+  "company": {
+    "company_id": "infosys",
+    "name": "Infosys Limited",
+    "bse_scrip": "500209",
+    "isin": "INE009A01021"
+  },
+  "retrieved_at": "2026-10-26",
+  "basis": "consolidated Ind AS",
+  "sources": {
+    "fy26_statements": {
+      "url": "https://www.infosys.com/investors/reports-filings/quarterly-results/2025-2026/q4/documents/consolidated/consol-fy26-annual-finstatement.pdf",
+      "title": "Infosys consolidated Ind AS financial statements for year ended March 31, 2026",
+      "publication_date": "2026-04-23",
+      "publication_evidence_url": "https://www.infosys.com/investors/reports-filings/quarterly-results/2025-2026/q4.html",
+      "retrieval_date": "2026-10-26",
+      "basis": "consolidated",
+      "unit": "INR crore",
+      "pages": {
+        "balance_sheet": {
+          "printed": 1,
+          "pdf": 2
+        },
+        "profit_and_loss": {
+          "printed": 2,
+          "pdf": 3
+        },
+        "cash_flow_1": {
+          "printed": 5,
+          "pdf": 6
+        },
+        "cash_flow_2": {
+          "printed": 6,
+          "pdf": 7
+        },
+        "equity_shares_net_and_treasury": {
+          "printed": 26,
+          "pdf": 27
+        },
+        "gross_share_basis": {
+          "printed": 27,
+          "pdf": 28
+        }
+      }
+    },
+    "fy25_statements": {
+      "url": "https://www.infosys.com/investors/reports-filings/quarterly-results/2024-2025/q4/documents/consolidated/consol-fy25-annual-finstatement.pdf",
+      "title": "Infosys consolidated Ind AS financial statements for year ended March 31, 2025",
+      "publication_date": "2025-04-17",
+      "publication_evidence_url": "https://www.infosys.com/investors/reports-filings/quarterly-results/2024-2025/q4.html",
+      "retrieval_date": "2026-10-26",
+      "basis": "consolidated",
+      "unit": "INR crore",
+      "pages": {
+        "balance_sheet": {
+          "printed": 1,
+          "pdf": 2
+        },
+        "profit_and_loss": {
+          "printed": 2,
+          "pdf": 3
+        },
+        "cash_flow_1": {
+          "printed": 5,
+          "pdf": 6
+        },
+        "cash_flow_2": {
+          "printed": 6,
+          "pdf": 7
+        }
+      }
+    },
+    "fy26_annual": {
+      "url": "https://www.infosys.com/investors/reports-filings/annual-report/annual/documents/infosys-ar-26.pdf",
+      "title": "Infosys Integrated Annual Report 2025-26",
+      "publication_date": null,
+      "retrieval_date": "2026-10-26",
+      "note": "Annual report publication date not established; use FY26 results financial-statement source for publication-date control.",
+      "pages": {
+        "balance_sheet": {
+          "printed": "316-317",
+          "pdf": "285-286"
+        },
+        "profit_and_loss": {
+          "printed": "318-319",
+          "pdf": "287-288"
+        },
+        "cash_flow": {
+          "printed": "325-326",
+          "pdf": "294-295"
+        },
+        "equity_shares_net_and_treasury": {
+          "printed": 352,
+          "pdf": 321
+        },
+        "gross_share_basis": {
+          "printed": 353,
+          "pdf": 322
+        }
+      }
+    },
+    "fy25_annual": {
+      "url": "https://www.infosys.com/investors/reports-filings/annual-report/annual/documents/infosys-ar-25.pdf",
+      "title": "Infosys Integrated Annual Report 2024-25",
+      "publication_date": null,
+      "retrieval_date": "2026-10-26",
+      "note": "FY24 and FY25 comparative financial data verified here; use FY25 results statement for publication-date control.",
+      "pages": {
+        "balance_sheet": {
+          "printed": "302-303",
+          "pdf": "274-275"
+        },
+        "profit_and_loss": {
+          "printed": "304-305",
+          "pdf": "276-277"
+        },
+        "cash_flow": {
+          "printed": "311-312",
+          "pdf": "283-284"
+        },
+        "operating_profit": {
+          "printed": 374,
+          "pdf": 346
+        }
+      }
+    },
+    "fy27_q1_statements": {
+      "url": "https://www.infosys.com/investors/reports-filings/quarterly-results/2026-2027/q1/documents/consolidated/consol-fy27-q1-finstatement.pdf",
+      "title": "Infosys interim condensed consolidated Ind AS financial statements three months ended June30,2026",
+      "publication_date": "2026-07-23",
+      "retrieval_date": "2026-10-26",
+      "pages": {
+        "equity_shares_net_and_treasury": {
+          "printed": 20,
+          "pdf": 21
+        }
+      }
+    }
+  },
+  "field_source_page_key": {
+    "revenue": "profit_and_loss",
+    "operating_ebit": "profit_and_loss",
+    "depreciation_amortization": "profit_and_loss",
+    "capex": "cash_flow_1",
+    "trade_receivables": "balance_sheet",
+    "trade_payables": "balance_sheet",
+    "cash_and_cash_equivalents": "balance_sheet",
+    "weighted_average_diluted_shares": "profit_and_loss",
+    "net_income": "profit_and_loss",
+    "net_income_attributable_owners": "profit_and_loss",
+    "total_assets": "balance_sheet",
+    "total_equity": "balance_sheet",
+    "total_liabilities": "balance_sheet",
+    "cash_flow_operating": "cash_flow_1",
+    "cash_flow_investing": "cash_flow_2",
+    "cash_flow_financing": "cash_flow_2",
+    "cash_flow_net_change": "cash_flow_2",
+    "cash_fx_effect": "cash_flow_2",
+    "cash_opening": "cash_flow_2",
+    "cash_flow_closing_cash_equivalents": "cash_flow_2",
+    "restricted_cash": "cash_flow_2",
+    "lease_liabilities": "balance_sheet",
+    "non_controlling_interest": "balance_sheet",
+    "cash_taxes_paid": "cash_flow_1",
+    "current_investments": "balance_sheet",
+    "noncurrent_investments": "balance_sheet",
+    "debt": "balance_sheet",
+    "current_assets": "balance_sheet",
+    "current_liabilities": "balance_sheet",
+    "equity_attributable_owners": "balance_sheet",
+    "finance_cost": "profit_and_loss"
+  },
+  "annuals": [
+    {
+      "fiscal_year": 2024,
+      "period_end": "2024-03-31",
+      "source_id": "fy25_statements",
+      "revenue": 153670,
+      "operating_ebit": 31747,
+      "depreciation_amortization": 4678,
+      "capex": 2201,
+      "trade_receivables": 30193,
+      "trade_payables": 3956,
+      "cash_and_cash_equivalents": 14786,
+      "weighted_average_diluted_shares": 4144680425,
+      "net_income": 26248,
+      "net_income_attributable_owners": 26233,
+      "total_assets": 137814,
+      "total_equity": 88461,
+      "total_liabilities": 49353,
+      "cash_flow_operating": 25210,
+      "cash_flow_investing": -5009,
+      "cash_flow_financing": -17504,
+      "cash_flow_net_change": 2697,
+      "cash_fx_effect": -84,
+      "cash_opening": 12173,
+      "cash_flow_closing_cash_equivalents": 14786,
+      "restricted_cash": 348,
+      "lease_liabilities": 8359,
+      "non_controlling_interest": 345,
+      "cash_taxes_paid": 9231,
+      "current_investments": 12915,
+      "noncurrent_investments": 11708,
+      "debt": 0,
+      "period_end_paid_up_shares": null,
+      "treasury_shares": null,
+      "reported_operating_ebit": 31747,
+      "diluted_eps": 63.29,
+      "current_assets": 89432,
+      "current_liabilities": 38794,
+      "equity_attributable_owners": 88116
+    },
+    {
+      "fiscal_year": 2025,
+      "period_end": "2025-03-31",
+      "source_id": "fy25_statements",
+      "revenue": 162990,
+      "operating_ebit": 34424,
+      "depreciation_amortization": 4812,
+      "capex": 2237,
+      "trade_receivables": 31158,
+      "trade_payables": 4164,
+      "cash_and_cash_equivalents": 24455,
+      "weighted_average_diluted_shares": 4152051184,
+      "net_income": 26750,
+      "net_income_attributable_owners": 26713,
+      "total_assets": 148903,
+      "total_equity": 96203,
+      "total_liabilities": 52700,
+      "cash_flow_operating": 35694,
+      "cash_flow_investing": -1946,
+      "cash_flow_financing": -24161,
+      "cash_flow_net_change": 9587,
+      "cash_fx_effect": 82,
+      "cash_opening": 14786,
+      "cash_flow_closing_cash_equivalents": 24455,
+      "restricted_cash": 424,
+      "lease_liabilities": 8227,
+      "non_controlling_interest": 385,
+      "cash_taxes_paid": 5602,
+      "current_investments": 12482,
+      "noncurrent_investments": 11059,
+      "debt": 0,
+      "period_end_paid_up_shares": 4153263455,
+      "treasury_shares": 9655927,
+      "net_outstanding_shares": 4143607528,
+      "reported_operating_ebit": 34424,
+      "diluted_eps": 64.34,
+      "current_assets": 97099,
+      "current_liabilities": 42850,
+      "equity_attributable_owners": 95818
+    },
+    {
+      "fiscal_year": 2026,
+      "period_end": "2026-03-31",
+      "source_id": "fy26_statements",
+      "revenue": 178650,
+      "operating_ebit": 37378,
+      "depreciation_amortization": 4902,
+      "capex": 2727,
+      "trade_receivables": 35234,
+      "trade_payables": 4744,
+      "cash_and_cash_equivalents": 22201,
+      "weighted_average_diluted_shares": 4120108168,
+      "net_income": 29474,
+      "net_income_attributable_owners": 29440,
+      "total_assets": 155967,
+      "total_equity": 93297,
+      "total_liabilities": 62670,
+      "cash_flow_operating": 33986,
+      "cash_flow_investing": 1946,
+      "cash_flow_financing": -39786,
+      "cash_flow_net_change": -3854,
+      "cash_fx_effect": 1600,
+      "cash_opening": 24455,
+      "cash_flow_closing_cash_equivalents": 22201,
+      "restricted_cash": 422,
+      "lease_liabilities": 9176,
+      "non_controlling_interest": 445,
+      "cash_taxes_paid": 8648,
+      "current_investments": 12950,
+      "noncurrent_investments": 8930,
+      "debt": 0,
+      "period_end_paid_up_shares": 4055591723,
+      "treasury_shares": 8650911,
+      "net_outstanding_shares": 4046940812,
+      "labour_code_exceptional_item": 1289,
+      "profit_before_exceptional_item_and_tax": 41284,
+      "finance_cost": 416,
+      "other_income": 4322,
+      "reported_operating_ebit": 36089,
+      "diluted_eps": 71.46,
+      "current_assets": 103489,
+      "current_liabilities": 52322,
+      "equity_attributable_owners": 92852
+    }
+  ],
+  "notes": [
+    "All money fields are INR crore. All fields ending _shares are absolute numbers of shares; divide by 10,000,000 for crore shares.",
+    "FY24 values are comparative audited data in FY25 statement, with conservative publication date April17,2025 rather than fabricated FY24 publication.",
+    "operating_ebit = profit before exceptional item and tax + finance cost - other income. FY26 41284+416-4322=37378, before separately disclosed Labour Codes charge1289.",
+    "FY24/FY25 operating EBIT verified directly in FY25 annual report note2.27 printed374 (PDF346).",
+    "total_liabilities = reported non-current liabilities + reported current liabilities; lease_liabilities similarly sums reported current/non-current leases.",
+    "capex stored positive for FCFF subtraction; source is the cash outflow line for PPE/intangibles. FY26/FY25 line is net of sale proceeds; FY24 comparative cash-flow line reports expenditure2201.",
+    "Debt0 for FY26/FY25 supported by annual-report liquidity text: no outstanding borrowings. FY24 balance sheet includes no borrowings; use0 only after checking original no-borrowings note if stricter provenance required.",
+    "IMPORTANT: FY26 shares4046940812 are already NET OF treasury8650911. Gross shares4055591723 are separately stated in promoter-shareholding note. Do not subtract treasury a second time.",
+    "Fully diluted period-end denominator remains null; annual diluted weighted-average shares must not replace it.",
+    "Annual report physical PDFpage mapping uses one-based page numbers; printed reportpage may differ.",
+    "For strict historical point-in-time valuation, information_cutoff must not precede actual financial-source publication date. A March31 effective financial/share date can coexist with later current-date valuation only with an explicit stale/as-of share warning; do not label post-April23 source information as available on March31.",
+    "Peer data stores both reported and adjusted metrics. For comparable tables use reported EBIT for Infosys36089, TCS62312, HCL21441 and Wipro14900.5; adjusted metrics have differing exclusions and must be labelled. Use owner-attributable net income for P/E.",
+    "The June30,2026 net share observation4049645811 is verified at printed20/PDF21 of Q1FY27 statement and is already net of treasury7933019. It was published July23,2026, so cannot be used in a point-in-time June30 valuation without retrospective labelling."
+  ],
+  "peers": [
+    {
+      "company_id": "tcs",
+      "company": "Tata Consultancy Services Limited",
+      "bse_scrip": "532540",
+      "fiscal_year": 2026,
+      "financial_period_end": "2026-03-31",
+      "basis": "consolidated Ind AS",
+      "unit": "INR crore",
+      "revenue": 267021,
+      "reported_operating_ebit": 62312,
+      "adjusted_operating_ebit": 66838,
+      "reported_net_income": 49454,
+      "reported_net_income_attributable_owners": 49210,
+      "adjusted_net_income_attributable_owners": 52820,
+      "reported_diluted_eps": 136.01,
+      "adjusted_diluted_eps": 145.99,
+      "source_url": "https://www.tcs.com/content/dam/tcs/investor-relations/financial-statements/2025-26/ar/annual-report-2025-2026.pdf",
+      "source_printed_page": 197,
+      "source_pdf_page": 167,
+      "results_publication_date": "2026-04-09",
+      "results_publication_evidence_url": "https://www.tcs.com/who-we-are/newsroom/press-release/tcs-financial-results-q4-fy-2026",
+      "notes": "Reported operating EBIT = PBT65487+finance1227-otherincome4402. Adjusted EBIT excludes restructuring1388, LabourCodes2128 and legalclaim1010. Net income for equity multiples uses owners49210 rather than group49454. Annual-report exact publication date not established; facts were released April9 as supported by results release."
+    },
+    {
+      "company_id": "hcltech",
+      "company": "HCL Technologies Limited",
+      "bse_scrip": "532281",
+      "fiscal_year": 2026,
+      "financial_period_end": "2026-03-31",
+      "basis": "consolidated Ind AS INR",
+      "unit": "INR crore",
+      "revenue": 130144,
+      "reported_operating_ebit": 21441,
+      "adjusted_operating_ebit": 22397,
+      "reported_net_income": null,
+      "reported_net_income_attributable_owners": 16642,
+      "adjusted_net_income_attributable_owners": 17361,
+      "reported_diluted_eps": 61.36,
+      "adjusted_diluted_eps": 64.01,
+      "source_url": "https://www.hcltech.com/sites/default/files/document/open/quarter-results/2026-04/hcltech-q4-fy26-investor-release.pdf",
+      "source_printed_page": null,
+      "source_pdf_page": 25,
+      "results_publication_date": "2026-04-21",
+      "results_publication_evidence_url": "https://www.hcltech.com/en-us/press-releases/hcltech-fy26-revenue-39-led-increasing-demand-advanced-ai",
+      "notes": "FY26 income statement explicitly gives reported EBIT21441, NI16642 and dilutedEPS61.36 in footnote. Headline adjusted EBIT22397 and NI17361 exclude LabourCodes956 and719; restructuring remains included. NI is after noncontrolling interest per income statement."
+    },
+    {
+      "company_id": "wipro",
+      "company": "Wipro Limited",
+      "bse_scrip": "507685",
+      "fiscal_year": 2026,
+      "financial_period_end": "2026-03-31",
+      "basis": "consolidated Ind AS",
+      "unit": "INR crore",
+      "revenue": 92624.0,
+      "reported_operating_ebit": 14900.5,
+      "adjusted_operating_ebit": 15176.1,
+      "reported_net_income": 13265.5,
+      "reported_net_income_attributable_owners": 13197.4,
+      "adjusted_net_income_attributable_owners": null,
+      "reported_diluted_eps": 12.56,
+      "adjusted_diluted_eps": null,
+      "source_url": "https://www.wipro.com/content/dam/nexus/en/investor/quarterly-results/2025-2026/q4fy26/regulation-33-financial-results-q4fy26.pdf",
+      "source_printed_page": "1-2 of consolidated section",
+      "source_pdf_page": "12-13",
+      "results_publication_date": "2026-04-16",
+      "results_publication_evidence_url": "https://www.wipro.com/newsroom/press-releases/2026/wipro-announces-results-for-the-quarter-and-year-ended-march-31-2026/",
+      "notes": "Raw statement unit INR million; conversionfactor0.1 to INRcrore. Reported operating EBIT=(revenue926240-(expenses791812-finance14577))/10=14900.5. Adjusted operatingEBIT adds only LabourCodecharge2756million/10=275.6. Revenue92809.3 in old docs incorrectly uses IFRS totalincome928093 including FX, not revenue926240. Segmentresult15125.1 also includes reconciliation items; use fullgroup definition. Group profit13265.5; owner profit13197.4."
+    }
+  ],
+  "share_observations": [
+    {
+      "effective_date": "2026-03-31",
+      "publication_date": "2026-04-23",
+      "net_outstanding_shares": 4046940812,
+      "gross_outstanding_shares": 4055591723,
+      "treasury_shares": 8650911,
+      "fully_diluted_period_end_shares": null,
+      "source_id": "fy26_statements",
+      "net_source_printed_page": 26,
+      "net_source_pdf_page": 27,
+      "gross_source_printed_page": 27,
+      "gross_source_pdf_page": 28,
+      "status": "verified_net_provisional_dilution"
+    },
+    {
+      "effective_date": "2026-06-30",
+      "publication_date": "2026-07-23",
+      "net_outstanding_shares": 4049645811,
+      "gross_outstanding_shares": 4057578830,
+      "treasury_shares": 7933019,
+      "fully_diluted_period_end_shares": null,
+      "diluted_weighted_average_shares": 4052877757,
+      "source_id": "fy27_q1_statements",
+      "net_source_printed_page": 20,
+      "net_source_pdf_page": 21,
+      "gross_source_printed_page": null,
+      "gross_source_pdf_page": null,
+      "gross_derivation": "net+treasury, not separately verified gross observation",
+      "status": "verified_net_provisional_dilution"
+    }
+  ]
+}

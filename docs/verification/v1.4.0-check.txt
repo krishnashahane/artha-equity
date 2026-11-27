@@ -1,0 +1,117 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> artha-equity-research@1.4.0 check
+> npm run build && npm test && python3 -m unittest discover -s tests
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> artha-equity-research@1.4.0 build
+> node scripts/build.mjs
+
+Packaged portable project: /workspace/scratch/aee8781ece98/repo/artha-equity 2/dist/downloads/artha-equity-project.zip
+Built Artha: desktop interface, Python-compiled cases, reviewed evidence and source download.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> artha-equity-research@1.4.0 test
+> node --test web-tests/*.test.mjs
+
+{"method":"GET","path":"/api/health","status":200,"durationMs":3.881}
+✔ health endpoint does not expose configuration secrets (52.994422ms)
+{"method":"POST","path":"/api/valuation","status":200,"durationMs":119.723}
+✔ registered valuation endpoint returns a provisional calculated result (131.298629ms)
+{"method":"POST","path":"/api/valuation","status":400,"durationMs":0.813}
+✔ unregistered company is rejected (3.231064ms)
+{"method":"POST","path":"/api/assistant","status":200,"durationMs":117.22}
+✔ evidence assistant returns citations without requiring an API key (120.437813ms)
+{"method":"POST","path":"/api/packet","status":403,"durationMs":0.235}
+✔ cross-origin requests are rejected (2.516083ms)
+{"method":"POST","path":"/api/assistant","status":400,"durationMs":0.917}
+✔ requests above the body limit are rejected (2.823599ms)
+{"method":"POST","path":"/api/packet","status":200,"durationMs":65.803}
+✔ packet endpoint includes source evidence and input manifest (68.493039ms)
+{"method":"POST","path":"/api/valuation","status":200,"durationMs":65.314}
+✔ HTTP valuations identify Python as their calculation authority (68.798942ms)
+{"method":"POST","path":"/api/capital-cost","status":200,"durationMs":56.078}
+✔ CAPM/WACC endpoint matches a manual example (60.282626ms)
+{"method":"POST","path":"/api/analytics","status":200,"durationMs":48.681}
+✔ fundamental ratio endpoint preserves missing evidence (53.446427ms)
+{"method":"POST","path":"/api/valuation","status":200,"durationMs":77.911}
+{"method":"GET","path":"/api/runs","status":200,"durationMs":69.31}
+✔ valuation snapshots are persisted in SQLite (157.136892ms)
+{"method":"POST","path":"/api/valuation","status":422,"durationMs":47.734}
+✔ Python API blocks a point-in-time source-publication breach (53.296519ms)
+{"method":"POST","path":"/api/valuation","status":200,"durationMs":49.456}
+✔ per-year margins are calculated by Python (51.890925ms)
+{"method":"POST","path":"/api/monte-carlo","status":200,"durationMs":59.329}
+{"method":"POST","path":"/api/monte-carlo","status":200,"durationMs":57.208}
+✔ Monte Carlo endpoint has deterministic Python quantiles and histogram (121.428649ms)
+{"method":"POST","path":"/api/reverse-dcf","status":200,"durationMs":70.788}
+✔ reverse DCF endpoint solves a hypothetical price (73.229731ms)
+{"method":"POST","path":"/api/reverse-dcf","status":422,"durationMs":49.25}
+{"method":"POST","path":"/api/reverse-dcf","status":403,"durationMs":0.265}
+{"method":"POST","path":"/api/monte-carlo","status":422,"durationMs":56.028}
+{"method":"POST","path":"/api/monte-carlo","status":403,"durationMs":0.151}
+✔ study endpoints reject invalid inputs and preserve same-origin checks (113.943948ms)
+{"method":"GET","path":"/api/companies","status":401,"durationMs":2.96}
+{"method":"GET","path":"/api/companies","status":200,"durationMs":0.487}
+{"method":"GET","path":"/api/health","status":200,"durationMs":0.262}
+✔ deployment protects UI and API without revealing a password (50.126696ms)
+✔ production Python calculations run without third-party site packages (98.808871ms)
+✔ reviewed source snapshot has three consecutive annual years (3.486123ms)
+✔ all twelve independent statement checks pass (3.68641ms)
+✔ a broken balance sheet blocks the model (2.324318ms)
+✔ terminal growth at WACC blocks valuation (0.352343ms)
+✔ NaN and infinite inputs cannot escape validation (0.429587ms)
+✔ fewer than five forecast growth assumptions are rejected (0.268859ms)
+✔ point-in-time study rejects future publication information (1.387368ms)
+✔ net share denominator does not subtract treasury twice (0.388747ms)
+✔ extra capex lowers value; extra excess cash increases equity exactly (0.897592ms)
+✔ terminal growth sensitivity rebuilds terminal-year NWC (0.827978ms)
+✔ discount periods change with the actual valuation date (2.174757ms)
+✔ no direct market observation means no fabricated upside (0.328768ms)
+✔ sensitivity middle cell agrees with the active model (3.657837ms)
+✔ peer multiples require compatible shares, prices and bridge inputs (0.665678ms)
+✔ peer profits use reported owner income consistently (0.247907ms)
+✔ research packet preserves manifest, assumptions and warnings (5.790032ms)
+✔ unsupported question receives a coverage limitation (3.763815ms)
+✔ every assistant citation exists in the source register (33.581397ms)
+✔ incorrect financial unit labels are rejected (0.162831ms)
+✔ missing evidence page references are rejected (0.530788ms)
+✔ native module graph boots and renders every view without calculations (60.075288ms)
+✔ charts expose Python-provided values and accessible descriptions (1.749026ms)
+✔ dialog lifecycle makes the background inert and restores it (4.150413ms)
+✔ deployable engine has no valuation or multiple calculation exports (0.409508ms)
+✔ selector renders a synthetic second issuer with its own compiled values and periods (8.997731ms)
+✔ resetting a conversation discards an in-flight response (10.807746ms)
+✔ pool bounds concurrent workers and queue; recovers after a rejected job (15.463655ms)
+✔ queued jobs time out without consuming a worker slot (10.677593ms)
+✔ readiness checks Python and storage; failure returns 503 (155.552381ms)
+✔ JSON logs contain method/path/status/duration and exclude queries, bodies and credentials (8.751175ms)
+✔ failed logins are throttled before comparison and readiness remains protected (16.860356ms)
+✔ API rate limit, same-origin scheme and malformed JSON controls remain enforced (66.72877ms)
+✔ CSP disallows inline scripts and does not add external origins (3.142954ms)
+✔ a pinned HTTPS proxy origin accepts only the exact configured origin (55.720587ms)
+✔ asset traversal does not expose source files (7.571915ms)
+✔ LLM citations and numeric claims in both title and body are validated (444.588847ms)
+✔ Python and test-only JS reference agree on base scenario (523.055844ms)
+✔ Python and test-only JS reference agree on bull scenario (495.442313ms)
+✔ Python and test-only JS reference agree on bear scenario (358.319783ms)
+✔ retrieval retains source pages, dates and document IDs (7.719464ms)
+✔ unmatched question does not invent an evidence chunk (4.881333ms)
+✔ every corpus fact resolves to an approved source document (2.805022ms)
+✔ focus trap wraps both ways and ignores hidden or disabled controls (1.678691ms)
+✔ empty dialogs retain focus and non-Tab keys are untouched (0.360735ms)
+✔ theme text, links and button tokens have AA contrast (1.6916ms)
+ℹ tests 63
+ℹ suites 0
+ℹ pass 63
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1610.712269
+........................................................
+----------------------------------------------------------------------
+Ran 56 tests in 1.254s
+
+OK

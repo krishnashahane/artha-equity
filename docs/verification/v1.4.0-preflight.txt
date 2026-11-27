@@ -1,0 +1,7 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> artha-equity-research@1.4.0 preflight
+> python3 -S scripts/preflight_web.py
+
+infosys: 12/12 reconciliations PASS; Python authority; unavailable market evidence preserved
+Preflight PASS

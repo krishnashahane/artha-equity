@@ -1,0 +1,19 @@
+{
+  "name": "artha-equity-research",
+  "version": "1.4.1",
+  "private": true,
+  "type": "module",
+  "description": "Desktop equity research with authoritative Python analytics and source-backed explanations",
+  "scripts": {
+    "start": "node backend/server.mjs",
+    "dev": "node backend/server.mjs",
+    "build": "node scripts/build.mjs",
+    "test": "node --test web-tests/*.test.mjs",
+    "model": "node scripts/cli.mjs",
+    "check": "npm run build && npm test && (test -x .venv/bin/python && .venv/bin/python -m unittest discover -s tests || python3 -m unittest discover -s tests)",
+    "preflight": "python3 -S scripts/preflight_web.py"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

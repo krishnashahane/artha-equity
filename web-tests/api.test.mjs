@@ -1,0 +1,40 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createServer} from '../backend/server.mjs';
+import {readFileSync} from 'node:fs';
+let server,origin;
+test.before(async()=>{server=createServer();await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));origin='http://127.0.0.1:'+server.address().port;});
+test.after(()=>new Promise(resolve=>server.close(resolve)));
+const post=(route,body,headers={})=>fetch(origin+route,{method:'POST',headers:{'Content-Type':'application/json',...headers},body:JSON.stringify(body)});
+test('health endpoint does not expose configuration secrets',async()=>{const r=await fetch(origin+'/api/health'),body=await r.json();assert.equal(r.status,200);assert.equal(body.status,'ok');assert.ok(!JSON.stringify(body).includes('API_KEY'));});
+test('registered valuation endpoint returns a provisional calculated result',async()=>{const r=await post('/api/valuation',{companyId:'infosys'}),body=await r.json();assert.equal(r.status,200);assert.equal(body.valid,true);assert.equal(body.status,'provisional');assert.equal(body.shares,404.6940812);});
+test('unregistered company is rejected',async()=>{const r=await post('/api/valuation',{companyId:'../../etc/passwd'});assert.equal(r.status,400);});
+test('evidence assistant returns citations without requiring an API key',async()=>{const r=await post('/api/assistant',{companyId:'infosys',question:'Explain revenue'}),body=await r.json();assert.equal(r.status,200);assert.ok(['evidence','llm'].includes(body.mode));assert.ok(body.citations.length);});
+test('cross-origin requests are rejected',async()=>{const r=await post('/api/packet',{companyId:'infosys'},{Origin:'https://example.com'});assert.equal(r.status,403);});
+test('requests above the body limit are rejected',async()=>{const r=await post('/api/assistant',{companyId:'infosys',question:'x'.repeat(34000)});assert.equal(r.status,400);});
+test('packet endpoint includes source evidence and input manifest',async()=>{const r=await post('/api/packet',{companyId:'infosys'}),body=await r.json();assert.equal(r.status,200);assert.ok(body.sources.length);assert.ok(body.inputManifest.sha256);});
+test('HTTP valuations identify Python as their calculation authority',async()=>{const r=await post('/api/valuation',{companyId:'infosys'}),body=await r.json();assert.equal(body.calculationAuthority,'python');assert.equal(body.sensitivity.values.length,5);});
+test('CAPM/WACC endpoint matches a manual example',async()=>{const r=await post('/api/capital-cost',{inputs:{risk_free_rate:.05,beta:1.2,equity_risk_premium:.06,cost_of_debt:.08,tax_rate:.25,market_equity_value:800,market_debt_value:200}}),body=await r.json();assert.equal(r.status,200);assert.ok(Math.abs(body.wacc-.1096)<1e-12);});
+test('fundamental ratio endpoint preserves missing evidence',async()=>{const r=await post('/api/analytics',{companyId:'infosys'}),body=await r.json();assert.equal(r.status,200);assert.equal(body.annuals.length,3);assert.equal(body.annuals[2].gross_margin,null);assert.ok(body.annuals[2].current_ratio>1);});
+test('valuation snapshots are persisted in SQLite',async()=>{const r=await post('/api/valuation',{companyId:'infosys',persist:true}),body=await r.json();assert.ok(body.runId);const runs=await (await fetch(origin+'/api/runs?companyId=infosys')).json();assert.ok(runs.runs.some(row=>row.id===body.runId));});
+test('Python API blocks a point-in-time source-publication breach',async()=>{const c=JSON.parse(readFileSync(new URL('../data/companies.json',import.meta.url),'utf8')).companies[0];const r=await post('/api/valuation',{companyId:'infosys',assumptions:{...c.assumptions,studyMode:'point_in_time',informationCutoff:'2026-03-31'}}),body=await r.json();assert.equal(r.status,422);assert.equal(body.valid,false);});
+test('per-year margins are calculated by Python',async()=>{
+  const c=JSON.parse(readFileSync(new URL('../data/companies.json',import.meta.url),'utf8')).companies[0];
+  const r=await post('/api/valuation',{companyId:c.id,assumptions:{...c.assumptions,margins:[.19,.20,.21,.22,.23]}}),b=await r.json();
+  assert.equal(r.status,200);assert.ok(Math.abs(b.forecast[0].ebit/b.forecast[0].revenue-.19)<1e-12);assert.equal(b.bridge.at(-1).end,b.equityValue);
+});
+test('Monte Carlo endpoint has deterministic Python quantiles and histogram',async()=>{
+  const body={companyId:'infosys',options:{iterations:100}};
+  const a=await (await post('/api/monte-carlo',body)).json(),b=await (await post('/api/monte-carlo',body)).json();
+  assert.equal(a.valid,true);assert.deepEqual(a,b);assert.equal(a.calculationAuthority,'python');assert.equal(a.histogram.reduce((s,b)=>s+b.count,0),100);
+});
+test('reverse DCF endpoint solves a hypothetical price',async()=>{
+  const r=await post('/api/reverse-dcf',{companyId:'infosys',price:1000}),b=await r.json();
+  assert.equal(r.status,200);assert.ok(Math.abs(b.solvedPerShare-1000)<1e-6);assert.equal(b.priceStatus,'user_supplied_hypothetical');
+});
+test('study endpoints reject invalid inputs and preserve same-origin checks',async()=>{
+  for(const [route,extra] of [['/api/reverse-dcf',{price:-1}],['/api/monte-carlo',{options:{iterations:999999}}]]){
+    const r=await post(route,{companyId:'infosys',...extra});assert.equal(r.status,422);assert.equal((await r.json()).valid,false);
+    assert.equal((await post(route,{companyId:'infosys',...extra},{Origin:'https://example.com'})).status,403);
+  }
+});

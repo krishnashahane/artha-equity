@@ -1,0 +1,5 @@
+company_id,company,bse_scrip,isin,sector,coverage_status,notes
+infosys,Infosys Limited,500209,INE009A01021,Information Technology,valuation_ready,Three reconciled annual periods; provisional dilution and educational assumptions.
+tcs,Tata Consultancy Services Limited,532540,,Information Technology,peer_fundamentals_ready,Full three-year statement history and shares required for standalone DCF.
+hcltech,HCL Technologies Limited,532281,,Information Technology,peer_fundamentals_ready,Full three-year statement history and shares required for standalone DCF.
+wipro,Wipro Limited,507685,,Information Technology,peer_fundamentals_ready,Full three-year statement history and shares required for standalone DCF.
