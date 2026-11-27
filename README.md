@@ -1,165 +1,292 @@
-# Artha — A clearer view of value
+# Artha Equity
 
-A desktop equity-research application built from the original PBL repository. It combines reviewed Infosys FY24–FY26 financials, a Python FCFF model, scenarios, comparable analysis and evidence-linked explanations.
+**AI-powered equity research and valuation for Indian listed companies, where every number shows where it came from.**
 
-The interface uses a light, spacious visual system inspired by Apple's restraint: three primary areas, large readable type and detailed analysis on demand. It supports desktop and tablet workspaces down to 768px, with light/dark appearances and keyboard-accessible dialogs.
+[![CI](https://github.com/krishnashahane/artha-equity/actions/workflows/ci.yml/badge.svg)](https://github.com/krishnashahane/artha-equity/actions/workflows/ci.yml)
+![Version](https://img.shields.io/badge/version-1.4.1-orange)
+![Node](https://img.shields.io/badge/node-%E2%89%A520-339933)
+![Python](https://img.shields.io/badge/python-%E2%89%A53.10-3776AB)
+![Runtime dependencies](https://img.shields.io/badge/runtime%20dependencies-0-brightgreen)
+![License](https://img.shields.io/badge/license-MIT-blue)
 
-## Artha Terminal
+**Live demo:** https://artha-equity.vercel.app · **Terminal:** https://artha-equity.vercel.app/#terminal
 
-A dense, keyboard-first research console sits beside the calm workspace. Open `/#terminal`
-(or press `` ` ``), then type `HELP`. Try `WACC 11`, `GP FCFF`, `MC 2000`, `RDCF 1500`,
-`SRCH FY2026 revenue`, `ASK how does WACC change the valuation?` or `LOAD TCS`.
-Eleven linked panels cover valuation and bridge, history and forecast graph, assumptions,
-financial analysis, FCFF schedule, WACC × g sensitivity, peers, reconciliations,
-identifiers and evidence, plus a console. Every number is labelled FACT, ASM, CALC or
-INTERP. See [docs/TERMINAL.md](docs/TERMINAL.md).
+![Artha Terminal](docs/images/terminal.jpg)
 
-## Deploy on Vercel
+Artha answers three questions about a listed company:
 
-`Dockerfile.vercel` runs the Node server and stdlib-only Python workers on Vercel's container
-runtime as an anonymous, read-only demo (`APP_PUBLIC_ACCESS=true`, `ARTHA_STORAGE_MODE=browser`,
-`TRUST_PROXY=1`). Set `APP_AUTH_PASSWORD` in the Vercel project to require sign-in instead.
+1. **How is the business performing?** It shows reviewed financial statements, ratios and peers.
+2. **What could the equity be worth under stated assumptions?** It runs a five-year FCFF/DCF with scenarios, sensitivity, Monte Carlo and reverse DCF.
+3. **What supports the answer?** Every value links to a filing, a page and a publication date.
+
+> Educational research software. It does not give investment advice or make price predictions.
+
+---
+
+## Contents
+
+- [Two ways to work](#two-ways-to-work)
+- [Every number has a label](#every-number-has-a-label)
+- [Quick start](#quick-start)
+- [Terminal commands](#terminal-commands)
+- [How the valuation works](#how-the-valuation-works)
+- [Architecture](#architecture)
+- [Security](#security)
+- [Deployment](#deployment)
+- [API](#api)
+- [Testing](#testing)
+- [Coverage and limits](#coverage-and-limits)
+- [Project layout](#project-layout)
+- [Documentation](#documentation)
+
+---
+
+## Two ways to work
+
+| | **Workspace** (default) | **Terminal** (`#terminal` or press `` ` ``) |
+|---|---|---|
+| Style | Calm, spacious, detail on demand | Dense, dark, keyboard-first |
+| Navigation | Company · Valuation · Research | Command line, F-keys, 11 linked panels |
+| Best for | Learning, presenting, reading | Fast what-if analysis and cross-checking |
+
+![Artha workspace](docs/images/workspace.jpg)
+
+Both read the same Python results and the same reviewed data. Light and dark appearances work, and the layout adapts down to 768 px wide.
+
+## Every number has a label
+
+Artha keeps four kinds of value apart in the UI, in exports and in AI answers:
+
+| Label | Meaning | Example |
+|---|---|---|
+| `FACT` | Reported figure from a reviewed filing | FY2026 revenue **₹1,78,650 Cr** (Infosys consolidated statement, PDF p.3, published 23 Apr 2026) |
+| `ASM` | Analyst assumption, editable | **9%** FY2027E revenue growth |
+| `CALC` | Python calculation from facts and assumptions | ₹1,78,650 × 1.09 = **₹1,94,728.5 Cr** FY2027E revenue |
+| `INTERP` | Explanation of the evidence | "Growth reflects…", always cited |
+
+Unavailable stays unavailable. No reviewed same-date BSE close is on file, so the app shows market price, market cap and upside as **N/A**. It never fills them in from a provider quote or a hypothetical price.
+
+## Quick start
+
+You need **Node.js 20+** and **Python 3.10+**. The running app uses only the Node and Python standard libraries.
 
 ```bash
-vercel deploy --prod
-```
-
-## Run the complete application
-
-Install Node.js 20+ and Python 3.10+. The application has no third-party JavaScript or Python runtime dependencies.
-
-```bash
+git clone https://github.com/krishnashahane/artha-equity.git
+cd artha-equity
 npm run build
 npm start
 ```
 
-Open http://127.0.0.1:3000. Python owns the financial calculations; Node serves the desktop UI and API. Rebuild after changing public files or reviewed data. The original pandas/Jupyter analysis remains available separately; install `requirements.txt` only for the notebook, data tools and full development tests.
+Open http://127.0.0.1:3000 and press `` ` `` to switch to the terminal.
 
-For a container deployment, copy `.env.example` to `.env`, set your own `APP_AUTH_PASSWORD`, then run:
+Run the valuation from the command line without a browser:
 
 ```bash
-docker build -t artha-equity .
-docker run --env-file .env -e HOST=0.0.0.0 -p 3000:3000 -v artha-runtime:/app/data/runtime artha-equity
+npm run model -- --company infosys --scenario base
 ```
 
-Follow [the deployment guide](docs/DEPLOYMENT.md) for authentication, persistent storage, HTTPS and verification. No credentials are included. The Docker image definition is provided; an image build was not executed in this environment.
+## Terminal commands
 
-## Features
+Type a command and press **Enter**. Other keys:
 
-- Validated multi-company activation with issuer-specific snapshots, dated source
-  facts, official filing URLs/pages/publication dates/units and 12 reconciliation
-  checks per issuer. Infosys is the only fully reviewed production dataset today;
-  TCS/HCLTech/Wipro remain peer-only until full standalone evidence is reviewed.
-- Five annual growth and margin inputs, Python FCFF/sensitivity and an accessible
-  EV-to-equity SVG waterfall with exact table values.
-- Fixed-seed Monte Carlo P5/P50/P95 and histogram, plus reverse DCF for a
-  user-supplied hypothetical price. Missing market evidence stays unavailable.
-- Native state/views/dialogs/charts/API modules, dark mode, 768px layout, skeleton
-  states, focus containment and accessible status feedback.
-- Bounded stdlib Python workers, protected readiness, safe JSON request logs,
-  failed-login throttling, SQLite WAL, configurable retention and online backup.
-- Root-level CodeQL, Dependabot and full-check GitHub workflows.
+- **↑/↓** recall earlier commands.
+- **Tab** completes a command.
+- **Esc** clears the line.
+- **F1 HELP · F2 DES · F3 FA · F4 DCF · F6 SENS · F7 COMP · F8 EVID · F9 MC** jump to panels. F5 is left to the browser.
 
-See [onboarding](docs/COMPANY_ONBOARDING.md), [scenario contracts](docs/VALUATION_STUDIES.md),
-[UI modules](docs/UI_MODULES.md) and [operations](docs/OPERATIONS.md).
+| Command | What it does |
+|---|---|
+| `HELP` | List all commands |
+| `INFY` or `LOAD INFY` | Load a reviewed issuer by ticker, scrip code or ISIN |
+| `LOAD TCS` | Explain what evidence a peer-only issuer needs before it gets its own DCF |
+| `DES` `FA` `DCF` `SENS` `COMP` `CHK` `EVID` | Jump to a panel |
+| `GP REV` · `GP EBIT` · `GP CFO` · `GP FCFF` | Switch the chart |
+| `BASE` `BULL` `BEAR` | Load a scenario |
+| `WACC 11.5` · `TG 4.5` · `TAX 25` · `MARGIN 21` | Change one assumption (in %) and recalculate in Python |
+| `GROW 9 8 7 6 5` | Set five annual growth rates |
+| `DA 2.7` · `CAPEX 1.6` · `NWC 17` | Set reinvestment ratios as % of revenue |
+| `MC 2000` | Seeded Monte Carlo with 100–5000 paths, reporting P5/P50/P95 |
+| `RDCF 1500` | Growth rate implied by a *hypothetical* price |
+| `ASK how does WACC change the valuation?` | Cited, evidence-based explanation |
+| `SRCH FY2026 revenue` | BM25 search over reviewed facts, with PDF page links |
+| `ASM` · `EXP` · `CSV` | Full assumptions editor · research packet · forecast CSV |
+| `CLR` · `EXIT` | Clear the console · return to the workspace |
 
-## Three main areas
+The panels are: valuation and equity bridge, history and forecast chart, assumptions (press Enter to recalculate), financial analysis, FCFF schedule, WACC × terminal-growth sensitivity, company identifiers, evidence and lineage, console, peers, and reconciliation checks. See [docs/TERMINAL.md](docs/TERMINAL.md).
 
-- **Company:** reported history, source periods, revenue/profit/cash-flow charts, three-statement selected lines and fundamental ratios.
-- **Valuation:** base/bull/bear/custom assumptions, CAPM/WACC, five-year FCFF, terminal value, sensitivity, equity bridge and comparable multiples.
-- **Research:** explanations linked to reviewed financial facts and official sources, with an optional server-side language-model connector.
+## How the valuation works
 
-Sources, reconciliation checks, saved scenarios and methodology open in dialogs. JSON, CSV, browser print-to-PDF and the complete source ZIP are available from Export. Scenarios and market-import drafts use browser storage. Explicitly saved Python valuations also create immutable local SQLite snapshots with assumptions, provenance and market evidence in the input hash.
+1. **Establish the history.** Use three consolidated Ind AS years in INR crore. Twelve checks run: four accounting identities per year, within ±₹1 crore.
+2. **Forecast free cash flow to the firm.** `FCFF = EBIT × (1 − tax) + D&A − capex − ΔNWC`, where working capital is trade receivables minus trade payables.
+3. **Discount.** Discount periods are elapsed days ÷ 365.25. Terminal value is `TV = FCFF_next / (WACC − g)`, which requires `WACC > g`.
+4. **Bridge to equity.** Start from enterprise value, add assessed excess cash, then subtract debt, leases and non-controlling interests. Divide by dated net shares (404.6940812 crore at 31 March 2026, treasury shares already excluded).
+5. **Stress it.** Run the WACC × g sensitivity grid, the seeded Monte Carlo (seed 1729) and the reverse DCF.
 
-## Hosted preview and full application
+**Default Infosys case.** The defaults below are educational, not forecasts. The case is retrospective: it uses later-published filings as of 31 March 2026.
+- Growth: 9 / 8 / 7 / 6 / 5 %
+- EBIT margin: 20.5%
+- Operating tax: 25%
+- WACC: 12%
+- Terminal growth: 5%
 
-The hosted Site is a static desktop preview. Its base/bull/bear results and supported explanations are compiled by Python during the build. It does not run a browser financial engine or a Python server. Custom recalculation, CAPM, market imports, SQLite history and optional live LLM calls require the complete Node + Python application.
+Methodology and review notes are in [docs/MODEL_REVIEW.md](docs/MODEL_REVIEW.md).
 
-## Financial scope
+## Architecture
 
-The reviewed example is Infosys, with TCS, HCLTech and Wipro FY26 reported-basis peer financials. The default case is an explicitly retrospective March 31, 2026 valuation using later-published annual reports. It is provisional: growth, WACC, margins, sustainable reinvestment, excess cash and employee-award dilution need analyst review.
+```
+Browser (public/*.js)                Node (backend/server.mjs)             Python (backend/python_service.py)
+─────────────────────               ─────────────────────────             ──────────────────────────────────
+Workspace + Terminal  ── JSON ──▶   auth · rate limits · origin   ──stdin──▶  portable_finance  (FCFF/DCF)
+renders results only                checks · CSP · static files    ◀─stdout─  fundamental_analytics
+BM25 evidence search                bounded worker pool (2×16)               valuation_studies (MC, reverse DCF)
+                                    optional LLM, validated                  research_store    (SQLite, optional)
+```
 
-No price, upside or market multiple is invented. Reviewed official BSE CSV evidence and date-compatible shares are required to activate market comparisons; optional peer bridge inputs require an official-company financial source. Reported EBIT is distinguished from pre-exception EBIT. March 2026 net shares are 404.6940812 crore, already excluding treasury.
+- **Python is the only source of financial calculations.** Browser modules render values and never compute a valuation.
+- **Workers are isolated per request.** Each Python call runs as a separate process with a 30 s timeout, a 2 MB output cap, no shell, and a minimal environment that excludes passwords and API keys.
+- **Responses are checked for staleness.** The UI discards a result if the company or the inputs changed while it was in flight.
 
-This is a deployable research MVP. Automatic ticker/news ingestion, actual FinBERT inference, full PDF/vector RAG and academic report/presentation deliverables are not implemented. The [requirements audit](docs/REQUIREMENTS_AUDIT.md) records the boundary.
+## Security
+
+| Area | Control |
+|---|---|
+| Authentication | Optional HTTP Basic auth with constant-time comparison. Failed sign-ins are throttled to 10 per minute per client. Production refuses to start without a password unless `APP_PUBLIC_ACCESS=true` is set explicitly. |
+| Cross-site requests | POST requires a JSON body under 32 KB and a same-origin `Origin`. `Sec-Fetch-Site: cross-site` is rejected. |
+| Proxies | With `TRUST_PROXY=1`, forwarded client IP, protocol and host are used for rate limits, origin checks and HSTS. |
+| Rate limiting | 90 API requests per minute per client, with memory-bounded buckets. |
+| Headers | Strict CSP (`script-src 'self'`, `object-src 'none'`, `frame-ancestors 'none'`), `X-Frame-Options: DENY`, `nosniff`, COOP/CORP, Permissions-Policy, HSTS over HTTPS. |
+| Input | API fields are whitelisted. Python validates every assumption's range, date and unit. Errors are generic, with no tracebacks or paths. |
+| Output | All interpolated HTML is escaped. Only `https:` links render. |
+| Secrets | Optional LLM keys stay on the server and never reach the browser or the Python workers. `.env` files are git- and docker-ignored. |
+| LLM answers | Each answer must cite existing source IDs, and every number in it must already appear in the packet. Otherwise the app falls back to evidence mode. |
+| Containers | tini, non-root user, root-owned read-only code. Compose adds a read-only root filesystem, `cap_drop: ALL`, `no-new-privileges` and a loopback port bind. |
+| Dependencies | Zero runtime packages. CI runs `pip-audit` on the dev requirements. |
+
+To report a vulnerability, open a private GitHub security advisory on this repository.
+
+## Deployment
+
+### Vercel (live demo)
+
+`Dockerfile.vercel` runs the full Node + Python app on Vercel's container runtime as an anonymous demo. It sets `APP_PUBLIC_ACCESS=true`, `ARTHA_STORAGE_MODE=browser` and `TRUST_PROXY=1`. Saved scenarios and notes stay in the browser.
+
+```bash
+vercel link
+vercel env add PORT production     # value: 3000
+vercel deploy --prod
+```
+
+To require sign-in, set `APP_AUTH_PASSWORD` in the Vercel project settings.
+
+### Docker Compose (persistent history)
+
+```bash
+cp .env.example .env        # set APP_AUTH_PASSWORD
+docker compose up --build -d
+```
+
+This keeps SQLite run history in the `artha-research` volume and binds to `127.0.0.1:3000`. Set `APP_BIND=0.0.0.0` only behind your own TLS proxy. See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) and [docs/OPERATIONS.md](docs/OPERATIONS.md).
+
+### Environment variables
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `APP_AUTH_USER` / `APP_AUTH_PASSWORD` | `research` / none | Basic auth; the password is required in production unless public access is enabled |
+| `APP_PUBLIC_ACCESS` | off | `true` allows an anonymous production demo |
+| `HOST` / `PORT` | `127.0.0.1` / `3000` | Bind address |
+| `TRUST_PROXY` | off | Trust `X-Forwarded-*` headers from your proxy or CDN |
+| `APP_PUBLIC_ORIGIN` | none | Exact public origin when TLS ends at a proxy |
+| `ARTHA_STORAGE_MODE` | `server` | `browser` disables server-side SQLite history |
+| `PYTHON_WORKERS` / `PYTHON_QUEUE_LIMIT` | `2` / `16` | Calculation concurrency |
+| `RESEARCH_RETENTION_DAYS` | `365` | Saved-run retention (`0` keeps runs forever) |
+| `LLM_API_KEY` / `LLM_MODEL` / `LLM_API_URL` | none | Optional explanation provider (HTTPS only) |
 
 ## API
 
-All POST bodies are JSON objects. Company operations require a registered
-`companyId`; optional `assumptions` must be a complete assumption object. Rates
-are decimals, money is INR crore and per-share results are INR.
+All POST bodies are JSON objects. Rates are decimals, money is in INR crore, and per-share values are in INR.
 
-| Method | Endpoint | Input / result |
+| Method | Endpoint | Input → result |
 |---|---|---|
-| GET | `/api/health` | Public liveness and model version |
-| GET | `/api/ready` | Protected Python, all-issuer reconciliation and SQLite readiness; 503 if unavailable |
-| GET | `/api/companies` | Registered valuation-ready issuer IDs |
-| POST | `/api/valuation` | `{companyId, assumptions?, persist?, marketOverrides?}` → Python FCFF, sensitivity, bridge, checks |
-| POST | `/api/analytics` | `{companyId, assumptions?}` → fundamental ratios; unsupported ratios are null |
-| POST | `/api/capital-cost` | `{inputs}` → Python CAPM/WACC |
-| POST | `/api/monte-carlo` | `{companyId, assumptions?, options?}` → fixed-seed quantiles and 20 histogram bins |
-| POST | `/api/reverse-dcf` | `{companyId, assumptions?, price}` → flat implied annual growth and residual |
-| GET | `/api/runs?companyId=infosys` | Bounded saved-run metadata |
-| POST | `/api/packet` | `{companyId, assumptions?}` → reviewed research packet |
+| GET | `/api/health` | Public liveness, version, storage mode |
+| GET | `/api/ready` | Python, reconciliation and storage readiness (503 if not ready) |
+| GET | `/api/companies` | Registered issuers |
+| POST | `/api/valuation` | `{companyId, assumptions?, persist?, marketOverrides?}` → FCFF, sensitivity, bridge, checks, peers |
+| POST | `/api/analytics` | `{companyId, assumptions?}` → fundamental ratios |
+| POST | `/api/capital-cost` | `{inputs}` → CAPM/WACC |
+| POST | `/api/monte-carlo` | `{companyId, assumptions?, options?}` → seeded P5/P50/P95 and histogram |
+| POST | `/api/reverse-dcf` | `{companyId, assumptions?, price}` → implied flat growth |
+| GET | `/api/runs?companyId=` | Saved-run metadata (empty in browser storage mode) |
+| POST | `/api/packet` | `{companyId, assumptions?}` → research packet |
 | POST | `/api/retrieval` | `{companyId, question}` → ranked source facts |
-| POST | `/api/assistant` | `{companyId, question, assumptions?}` → cited evidence or validated optional LLM explanation |
+| POST | `/api/assistant` | `{companyId, question, assumptions?}` → cited explanation |
 
-`margins` optionally supplies five annual operating margins; scalar `margin` is
-kept as the fallback for older saved scenarios. Monte Carlo defaults to 1000
-iterations (100–5000), uniform growth/margin/WACC spreads of .02/.01/.01, seed
-1729. Reverse DCF holds other assumptions fixed and solves over [-50%,100%].
-Neither study manufactures a market quote or upside.
+Status codes:
+- `400` malformed request
+- `401` / `403` authentication or origin failure
+- `415` wrong content type
+- `422` invalid model inputs
+- `429` rate limit
+- `503` calculation service busy or not ready
 
-Protected routes use existing Basic auth and strict CSP. POST operations enforce
-same-origin, 32,000-byte bodies and JSON content type. Errors use 400 for malformed
-requests, 401/403 for auth/origin failures, 415 for content type, 422 for invalid
-model inputs, 429 for limits, and 503 for unavailable worker/readiness capacity.
-Production requires `APP_AUTH_PASSWORD`; use HTTPS. For a TLS proxy set the exact
-`APP_PUBLIC_ORIGIN`; forwarded headers do not determine origin or rate-limit IP.
-
-## Optional language model
-
-Evidence mode works without a key. To use a provider, set `LLM_API_KEY`, `LLM_MODEL` and the HTTPS `LLM_API_URL` in your local environment, then run:
+## Testing
 
 ```bash
-node --env-file=.env backend/server.mjs
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt      # pandas etc. for parity and notebook tests only
+npm run check                        # build + 71 Node tests + 56 Python tests
+npm run preflight                    # 12/12 reconciliations per registered issuer
 ```
 
-Provider keys stay server-side. Retrieved facts and deterministic Python outputs ground the response; invalid citations/numerical claims trigger an evidence fallback. No live provider call was verified for this release. Structured-fact BM25 retrieval is implemented; this is not full annual-report vector RAG.
+The suites cover:
+- the FCFF model, and parity against an independent pandas engine,
+- reconciliations, cutoff dates and share-count rules,
+- API validation and authentication,
+- proxy-aware origin checks and rate limits,
+- security headers and browser storage mode,
+- that worker environments exclude secrets,
+- the terminal's rendering, command validation and HTML escaping.
 
-## Development verification
+CI runs them on Node 20/22 × Python 3.10/3.12, plus `pip-audit` and Docker builds.
 
-```bash
-npm run check
-npm run preflight
-```
+## Coverage and limits
 
-Full tests require `requirements.txt`. `check` builds and runs all Node and Python tests; `preflight` validates every registered web issuer using only the standard library. The older `python3 scripts/preflight.py --no-write` checks the separate notebook CSV registry. Runtime smoke tests additionally run the service with Python site packages disabled. Tests compare the portable Python model with the independent pandas notebook engine across scenarios and cover reconciliation, cutoff dates, shares, API validation and authentication.
+- **Fully reviewed issuer: Infosys** (NSE `INFY`, BSE `500209`, ISIN `INE009A01021`), FY2024–FY2026, with 93 page-linked facts.
+- **Peers:** TCS, HCLTech and Wipro have FY2026 reported figures for comparison only. Activating an issuer's own DCF needs a reviewed package; see [docs/COMPANY_ONBOARDING.md](docs/COMPANY_ONBOARDING.md).
+- **Financial firms:** the FCFF model refuses banks and insurers, which need their own methodology.
+- **AI:** the assistant runs BM25 retrieval over curated facts, plus an optional validated LLM. These are future work, not implemented: whole-filing semantic RAG, news ingestion, FinBERT sentiment and live market feeds.
+- **Market data:** no market price is shown until a reviewed same-date BSE close and a matching dated share count are imported.
 
-## Learn and inspect
-
-Read [the learning guide](docs/LEARNING_GUIDE.md) for concepts before code, [architecture](docs/ARCHITECTURE.md) for service contracts, [model review](docs/MODEL_REVIEW.md) for financial assumptions and [design system](docs/DESIGN_SYSTEM.md) for the visual direction.
+## Project layout
 
 | Path | Responsibility |
 |---|---|
-| `src/portable_finance.py` | Dependency-free production Python FCFF model and sensitivity |
-| `backend/python_service.py` | Validated Python API adapter, analytics and comparable values |
-| `src/fundamental_analytics.py` | Ratios, CAPM/WACC, multiples and peer-implied values |
-| `src/research_store.py` | SQLite snapshots and input fingerprints |
-| `backend/server.mjs` | HTTP, authentication, API limits and optional LLM connector |
-| `public/app.js`, `public/styles.css` | Desktop interactions and visual system |
-| `scripts/prepare_preview.py` | Python compilation of static preview results |
-| `data/source_snapshot.json` | Reviewed official evidence |
-| `src/equity_platform.py` | Retained pandas notebook/reference model |
-| `Dockerfile`, `compose.yaml` | Full-application deployment |
-| `tests/`, `web-tests/` | Python, JavaScript, API and parity checks |
+| `backend/server.mjs` | HTTP routes, auth, limits, security headers, optional LLM |
+| `backend/python_bridge.mjs` | Bounded, isolated Python worker pool |
+| `backend/python_service.py` | Python request dispatch and validation |
+| `src/portable_finance.py` | Dependency-free production FCFF/DCF model |
+| `src/fundamental_analytics.py` | Ratios, CAPM/WACC, multiples, peer-implied values |
+| `src/valuation_studies.py` | Monte Carlo and reverse DCF |
+| `src/company_workspace.py` | Reviewed-issuer packages and validation |
+| `src/research_store.py` | SQLite snapshots, retention, backups |
+| `src/equity_platform.py` | pandas reference engine for notebooks and parity tests |
+| `public/terminal.js` | Artha Terminal |
+| `public/app.js` · `state.js` · `views.js` · `dialogs.js` · `charts.js` · `api.js` | Workspace UI modules |
+| `public/retrieval.js` | BM25 evidence retrieval |
+| `data/source_snapshot.json` · `data/companies.json` | Reviewed facts and the app dataset |
+| `scripts/` | Build, data preparation, onboarding, imports, CLI, preflight |
+| `tests/` · `web-tests/` | Python and Node test suites |
+| `Dockerfile` · `Dockerfile.vercel` · `compose.yaml` | Deployment |
 
-Original repository: https://github.com/adityamakurwar97-cyber/Ai-powered-Equity-reserch-and-Valuation-platform-
+## Documentation
 
-The original license and learning materials are preserved. This deliverable does not push changes to that original GitHub remote.
+- [Learning guide](docs/LEARNING_GUIDE.md): the finance concepts, before the code
+- [Terminal](docs/TERMINAL.md) · [UI modules](docs/UI_MODULES.md) · [Design system](docs/DESIGN_SYSTEM.md)
+- [Architecture](docs/ARCHITECTURE.md) · [Model review](docs/MODEL_REVIEW.md) · [Valuation studies](docs/VALUATION_STUDIES.md)
+- [Company onboarding](docs/COMPANY_ONBOARDING.md) · [RAG guide](docs/RAG_GUIDE.md) · [Requirements audit](docs/REQUIREMENTS_AUDIT.md)
+- [Deployment](docs/DEPLOYMENT.md) · [Operations](docs/OPERATIONS.md) · [Changelog](CHANGELOG.md)
 
-Browser QA is provided by `scripts/check_ui.mjs` using a separately installed
-Playwright developer tool. This environment could not launch Chromium because of
-an OS socket restriction. Automated module, keyboard-helper and theme-token checks
-pass; full visual/assistive-technology WCAG 2.2 AA validation remains unverified.
-The detailed release report records all changed files and executed checks.
+## Credits
+
+This started as a B.Sc. Data Science Project-Based Learning project at Symbiosis Skills & Professional University, Pune. Original repository: [adityamakurwar97-cyber/Ai-powered-Equity-reserch-and-Valuation-platform-](https://github.com/adityamakurwar97-cyber/Ai-powered-Equity-reserch-and-Valuation-platform-).
+
+Released under the [MIT License](LICENSE). Financial figures come from the issuers' public filings, linked in the app.
